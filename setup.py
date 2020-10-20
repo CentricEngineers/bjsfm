@@ -5,15 +5,15 @@ from setuptools import setup
 HERE = pathlib.Path(__file__).parent
 
 # The text of the README file
-README = (HERE / "README.md").read_text()
+README = (HERE / "README_pypi.rst").read_text()
 
 # This call to setup() does all the work
 setup(
     name="bjsfm",
-    version="0.0.2",
+    version="0.1.2",
     description="Bolted Joint Stress Field Model",
     long_description=README,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://github.com/BenjaminETaylor/bjsfm",
     author="Benjamin E. Taylor",
     author_email="benjaminearltaylor@gmail.com",
@@ -25,6 +25,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
+        "Topic :: Scientific/Engineering",
     ],
     keywords='joints stress engineering',
     packages=["bjsfm"],
