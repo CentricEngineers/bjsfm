@@ -213,7 +213,7 @@ class Analysis:
         strains = self.a_inv @ stresses.T*self.t
         return strains.T
 
-    def plot_stress(self, bearing, bypass, w=0., comp=0, rnum=100, tnum=100,
+    def plot_stress(self, bearing, bypass, w=0., comp=0, rnum=100, tnum=100, axes=None,
                 xbounds=None, ybounds=None, cmap='jet', cmin=None, cmax=None):
         """ Plots stresses
 
@@ -237,6 +237,8 @@ class Analysis:
             number of points to plot along radius
         tnum : int, default 100
             number of points to plot along circumference
+        axes : matplotlib.axes, optional
+            a custom axes to plot on
         xbounds : tuple of int, optional
             (x0, x1) x-axis bounds, default 6*radius
         ybounds : tuple of int, optional
@@ -249,8 +251,8 @@ class Analysis:
             maximum value for colormap
 
         """
-        plot_stress(self._unloaded(bearing, bypass, w=w), self._loaded(bearing), comp=comp, rnum=rnum, tnum=tnum,
-                    xbounds=xbounds, ybounds=ybounds, cmap=cmap, cmin=cmin, cmax=cmax)
+        plot_stress(lk_1=self._unloaded(bearing, bypass, w=w), lk_2=self._loaded(bearing), comp=comp, rnum=rnum,
+                    tnum=tnum, axes=axes, xbounds=xbounds, ybounds=ybounds, cmap=cmap, cmin=cmin, cmax=cmax)
 
 
 class MaxStrain(Analysis):
@@ -394,21 +396,21 @@ class MaxStrain(Analysis):
         Parameters
         ----------
         strains : ndarray
-            2D nx3 array of [:math: `\epsilon_x, \epsilon_y, \gamma_{xy}`] in-plane strains
+            2D nx3 array of [:math: `\epsilon_x, \epsilon_y, \epsilon_{xy}`] in-plane strains
         angle : float, default 0.
             angle measured counter-clockwise from positive x-axis (radians)
 
         Returns
         -------
         ndarray
-            2D nx3 array of [:math: `\epsilon_x', \epsilon_y', \gamma_{xy}'`] rotated stresses
+            2D nx3 array of [:math: `\epsilon_x', \epsilon_y', \epsilon_{xy}'`] rotated stresses
 
         """
         c = np.cos(angle)
         s = np.sin(angle)
         rotation_matrix = np.array([
-            [c**2, s**2, 2*s*c],
-            [s**2, c**2, -2*s*c],
+            [c**2, s**2, s*c],
+            [s**2, c**2, -s*c],
             [-2*s*c, 2*s*c, c**2 - s**2]
         ])
         strains = rotation_matrix @ strains.T
